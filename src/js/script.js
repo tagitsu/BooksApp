@@ -4,7 +4,6 @@
 // Oczywiście musisz wykorzystać w tym celu dostarczony już szablon (#template-book).
 
 this.data = dataSource;
-console.log('to dane z data.js', this.data);
 
 const select = {
   containerOf: {
@@ -26,12 +25,9 @@ const templates = {
 };
 
 function initBooksList() {
-  console.log(this.data.books);
   for (let book of this.data.books) {
     const codeHTML = templates.bookPanel(book);
-    console.log('to jest html dla książki', codeHTML);
     const domElement = utils.createDOMFromHTML(codeHTML);
-    console.log('to jest dom dla książki', domElement);
     const bookList = document.querySelector(select.books.list);
     bookList.appendChild(domElement);
   }
