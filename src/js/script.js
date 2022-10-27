@@ -49,6 +49,9 @@ renderBooksList();
 
 
 let favoritesBooks = [];
+let filters = [];
+
+
 function addToFavorites(link) {
   event.preventDefault();
   const bookId = link.getAttribute('data-id');
@@ -63,9 +66,49 @@ function addToFavorites(link) {
   }
 }
 
+// Ćwiczenie 5
+// filtrowanie książek przy użyciu formularza
+// Etap 1
+// pusta tablica filters
+// Następnie przygotuj referencję do formularza w .filters. 
+// Dodaj też do initActions nowy nasłuchiwacz, który będzie obserwować właśnie nasz formularz i kiedy wykryje 
+// jakiekolwiek kliknięcie, to uruchomi funkcję callback.
+// W funkcji tej sprawdzaj, czy kliknięto na element, który faktycznie jest naszym checkboxem 
+// (czy jego tagName to INPUT, type to checkbox, a name to filter), a jeśli tak, to pokaż w konsoli, jego wartość (value).
+
+
+function filterBooks(input) {
+  if (input.checked) {
+    console.log('filtr ' + event.target.value + ' jest zaznaczony');
+    filters.push(input.value);
+    console.log('tablica z filtrami', filters);
+  } else {
+    console.log('filtr ' + event.target.value + ' nie jest zaznaczony');
+    const filterIndex = filters.indexOf(input.value);
+    filters.splice(filterIndex, 1);
+    console.log('tablica z filtrami', filters);
+  }
+}
+
+// przejdzie po wszystkich książkach z dataSource.books i dla tych, które nie pasują do filtrów, doda klasę hidden. 
+// Z kolei dla tych, które pasują do filtrów, upewni się, że tej klasy nie mają.
+function hideBooks(input) {
+  const books = this.data.books;
+  console.log('wszystkie książki', books);
+  for (let book of books) {
+    if (book.details[adults] === true && input.value === 'adults') {
+      console.log('to jest książka 18+');
+    }
+  }
+  
+
+}
+
+
 // Ćwiczenie 4
 // event delegation - technika ta polega na tym, że zamiast nasłuchiwać na pojedyncze elementy, 
 // nasłuchuje się na jeden kontener.  
+
 
 function initAction() {
   const bookList = document.querySelector(select.books.list);
@@ -75,7 +118,16 @@ function initAction() {
       addToFavorites(bookLink);
     }
   });
-  
+
+  const filtersForm = document.querySelector(select.containerOf.form);
+  filtersForm.addEventListener('click', function(event) {
+    if (event.target.tagName === 'INPUT' && event.target.getAttribute('type') === 'checkbox' && event.target.getAttribute('name') === 'filter') {
+      filterBooks(event.target);
+      hideBooks(event.target);
+
+    }
+    
+  });
 }
 
 initAction();
