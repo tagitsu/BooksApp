@@ -40,19 +40,21 @@ renderBooksList();
 // musisz dodać do JS-a pustą tablicę favoriteBooks oraz odpowiedni kod, który zadba 
 // o to, aby przy dwukliku na okładkę dowolnej książki, jej id było dodawane do tej tablicy, 
 // a do samego elementu HTML została dodana klasa favorite. Tyle.
+
 function addToFavorites() {
+  event.preventDefault();
   const favoritesBooks = [];
-  favoritesBooks.push(this);
-  console.log('ulubione', favoritesBooks);
   this.classList.add('favorite');
+  const bookId = this.getAttribute('data-id');
+  console.log('id książki', bookId)
+  favoritesBooks.push(bookId);
+  console.log('favs', favoritesBooks);
 }
 function initAction() {
   const bookLink = document.querySelectorAll(select.books.bookLink);
-  console.log('linki do książek', bookLink);
   for (let link of bookLink) {
     link.addEventListener('dblclick', addToFavorites);
   }
 }
-
 
 initAction();
