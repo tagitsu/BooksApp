@@ -41,15 +41,33 @@ renderBooksList();
 // o to, aby przy dwukliku na okładkę dowolnej książki, jej id było dodawane do tej tablicy, 
 // a do samego elementu HTML została dodana klasa favorite. Tyle.
 
+// Ćwiczenie 3
+// Musisz tak zmodyfikować swoją funkcję przypiętą do nasłuchiwacza, aby najpierw sprawdzała, czy książka nie jest już 
+// w "ulubionych". Jeśli nie jest, to funkcja ma działać tak, jak dotychczas, a więc dodać klasę favorite i zapisać id 
+// książki w tablicy favoriteBooks. Jeśli jednak jest, to skrypt powinien usuwać id takiej książki z tablicy favoriteBooks 
+// oraz zabierać takiemu elementowi klasę favorite.
+
+
+let favoritesBooks = [];
 function addToFavorites() {
   event.preventDefault();
-  const favoritesBooks = [];
-  this.classList.add('favorite');
   const bookId = this.getAttribute('data-id');
-  console.log('id książki', bookId)
-  favoritesBooks.push(bookId);
-  console.log('favs', favoritesBooks);
+  console.log('id książki', bookId);
+  const bookIndex = favoritesBooks.indexOf(bookId);
+  console.log('index książki', bookIndex);
+  console.log('favs', favoritesBooks);  
+
+  if (bookIndex < 0) {
+    this.classList.add('favorite');
+    favoritesBooks.push(bookId);
+  } else if (bookIndex >= 0) {
+    this.classList.remove('favorite');
+    favoritesBooks.splice(bookIndex, 1);
+  }
 }
+  
+  
+
 function initAction() {
   const bookLink = document.querySelectorAll(select.books.bookLink);
   for (let link of bookLink) {
