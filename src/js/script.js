@@ -49,30 +49,33 @@ renderBooksList();
 
 
 let favoritesBooks = [];
-function addToFavorites() {
+function addToFavorites(link) {
   event.preventDefault();
-  const bookId = this.getAttribute('data-id');
-  console.log('id książki', bookId);
+  const bookId = link.getAttribute('data-id');
   const bookIndex = favoritesBooks.indexOf(bookId);
-  console.log('index książki', bookIndex);
-  console.log('favs', favoritesBooks);  
 
   if (bookIndex < 0) {
-    this.classList.add('favorite');
+    link.classList.add('favorite');
     favoritesBooks.push(bookId);
   } else if (bookIndex >= 0) {
-    this.classList.remove('favorite');
+    link.classList.remove('favorite');
     favoritesBooks.splice(bookIndex, 1);
   }
 }
-  
-  
+
+// Ćwiczenie 4
+// event delegation - technika ta polega na tym, że zamiast nasłuchiwać na pojedyncze elementy, 
+// nasłuchuje się na jeden kontener.  
 
 function initAction() {
-  const bookLink = document.querySelectorAll(select.books.bookLink);
-  for (let link of bookLink) {
-    link.addEventListener('dblclick', addToFavorites);
-  }
+  const bookList = document.querySelector(select.books.list);
+  bookList.addEventListener('dblclick', function(event) {
+    const bookLink = event.target.parentNode.parentNode;
+    if (bookLink.classList.contains('book__image')) {
+      addToFavorites(bookLink);
+    }
+  });
+  
 }
 
 initAction();
