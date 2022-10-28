@@ -3,6 +3,7 @@
 // i wyrenderuje dla nich reprezentacje HTML w liście .books-list. 
 // Oczywiście musisz wykorzystać w tym celu dostarczony już szablon (#template-book).
 
+
 this.data = dataSource;
 
 const select = {
@@ -24,6 +25,31 @@ const select = {
 const templates = {
   bookPanel: Handlebars.compile(document.querySelector(select.templateOf.book).innerHTML),
 };
+
+// Ćwiczenie 6
+
+function ratingBars() {
+  const books = dataSource.books;
+
+  for (let book of books) {
+    const bookRating = book.rating;
+    const ratingWidth = bookRating * 10;
+    book.ratingWidth = ratingWidth;
+    let ratingBgc = '';
+
+    if (bookRating < 6) {
+      ratingBgc = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)';
+    } else if (bookRating > 6 && bookRating <= 8) {
+      ratingBgc = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)';
+    } else if (bookRating > 8 && bookRating <= 9) {
+      ratingBgc = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+    } else if (bookRating > 9) {
+      ratingBgc = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)';
+    }
+    book.ratingBgc = ratingBgc;
+  }
+}
+ratingBars();
 
 function renderBooksList() {
   for (let book of this.data.books) {
@@ -50,7 +76,6 @@ renderBooksList();
 
 let favoritesBooks = [];
 let filters = [];
-
 
 function addToFavorites(link) {
   event.preventDefault();
@@ -105,7 +130,7 @@ function filterBooks() {
     if (book.id && shouldBeHidden) {
       bookCover.classList.add('hidden');
     } else if (!shouldBeHidden) {
-        bookCover.classList.remove('hidden');
+      bookCover.classList.remove('hidden');
     }
   }
 }
