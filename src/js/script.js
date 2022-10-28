@@ -77,32 +77,41 @@ function addToFavorites(link) {
 // (czy jego tagName to INPUT, type to checkbox, a name to filter), a jeśli tak, to pokaż w konsoli, jego wartość (value).
 
 
-function filterBooks(input) {
+function addFilters(input) {
   if (input.checked) {
-    console.log('filtr ' + event.target.value + ' jest zaznaczony');
     filters.push(input.value);
-    console.log('tablica z filtrami', filters);
   } else {
-    console.log('filtr ' + event.target.value + ' nie jest zaznaczony');
     const filterIndex = filters.indexOf(input.value);
     filters.splice(filterIndex, 1);
-    console.log('tablica z filtrami', filters);
   }
 }
 
 // przejdzie po wszystkich książkach z dataSource.books i dla tych, które nie pasują do filtrów, doda klasę hidden. 
 // Z kolei dla tych, które pasują do filtrów, upewni się, że tej klasy nie mają.
-function hideBooks(input) {
-  const books = this.data.books;
-  console.log('wszystkie książki', books);
+function filterBooks() {
+  const books = dataSource.books;
+  let shouldBeHidden = false;
+
   for (let book of books) {
-    if (book.details[adults] === true && input.value === 'adults') {
-      console.log('to jest książka 18+');
+    
+    for (let filter of filters) {
+      if (book.details[filter] === false && book.id) {
+        shouldBeHidden = true;
+      } else if (book.details[filter] === true && book.id) {
+        shouldBeHidden = false;
+      }
+    }
+    const bookCover = document.querySelector('.book__image[data-id="' + book.id + '"]');
+    if (book.id && shouldBeHidden) {
+      bookCover.classList.add('hidden');
+    } else if (!shouldBeHidden) {
+        bookCover.classList.remove('hidden');
     }
   }
+}
   
 
-}
+
 
 
 // Ćwiczenie 4
@@ -122,12 +131,11 @@ function initAction() {
   const filtersForm = document.querySelector(select.containerOf.form);
   filtersForm.addEventListener('click', function(event) {
     if (event.target.tagName === 'INPUT' && event.target.getAttribute('type') === 'checkbox' && event.target.getAttribute('name') === 'filter') {
-      filterBooks(event.target);
-      hideBooks(event.target);
-
+      addFilters(event.target);
     }
-    
   });
+
+  filtersForm.addEventListener('change', filterBooks);
 }
 
 initAction();
